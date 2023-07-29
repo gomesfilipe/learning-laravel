@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\Autenticador;
 use App\Http\Requests\SeriesFormRequest;
 use App\Models\Series;
-use App\Models\Season;
-use App\Models\Episode;
+use App\Repositories\SeriesRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class SeriesController extends Controller {
+    public function __construct(private SeriesRepository $repository) {
+        $this->middleware(Autenticador::class)->except('index');
+    }
+    
     public function index(Request $request) {
         // $series = DB::select('SELECT nome FROM series;'); // Escrevendo SQL
-        $series = Series::all();
+        // $series = Series::all();
+        $series = $this->repository->getAll();
         // $series = Series::query()->orderBy('nome')->get();
         // $series = Series::with(['seasons'])->get();
         $mensagemSucesso = $request->session()->get('mensagem.sucesso');
-
-
         return view('series.index', compact('series', 'mensagemSucesso'));
     }
 
@@ -26,39 +28,7 @@ class SeriesController extends Controller {
     }
 
     public function store(SeriesFormRequest $request) {
-        // $nomeSerie = $request->nome;
-
-        // DB::insert('INSERT INTO series (nome) VALUES (?)', [$nomeSerie]); // Escrevendo SQL
-
-        // $serie = new Serie();
-        // $serie->nome = $nomeSerie;
-        // $serie->save();
-
-        $serie = Series::create($request->all());
-        // $request->session()->flash('mensagem.sucesso', "Série '$serie->nome' adicionada com sucesso!");
-        
-        $seasons = [];
-        for($i = 1; $i <= $request->seasonQty; $i++) {
-            $seasons[] = [
-                'series_id' => $serie->id,
-                'number' => $i,
-            ];
-
-        }
-        
-        Season::insert($seasons);
-        
-        $episodes = [];
-        foreach($serie->seasons as $season) {
-            for($j = 1; $j <= $request->episodesPerSeason; $j++) {
-                $episodes[] = [
-                    'season_id' => $season->id,
-                    'number' => $j,
-                ];
-            }
-        }
-        
-        Episode::insert($episodes);
+        $serie = $this->repository->add($request);
 
         return to_route('series.index')->with('mensagem.sucesso', "Série '$serie->nome' adicionada com sucesso!");
     }
@@ -68,7 +38,8 @@ class SeriesController extends Controller {
         // a id passada no path e faz o select no banco.
 
         // Series::destroy($request->series);
-        $series->delete();
+        // $series->delete();
+        $this->repository->delete($series);
         // $request->session()->flash('mensagem.sucesso', "Série '$series->nome' removida com sucesso!");
 
 
@@ -76,9 +47,7 @@ class SeriesController extends Controller {
     }
 
     public function update(Series $series, SeriesFormRequest $request) {
-        // $series->nome = $request->nome;
-        $series->fill($request->all());
-        $series->save();
+        $this->repository->update($series, $request);
 
         return to_route('series.index')->with('mensagem.sucesso', "Série '$series->nome' atualizada com sucesso!");
     }
