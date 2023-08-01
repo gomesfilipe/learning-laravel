@@ -1,4 +1,4 @@
-<form action="{{ $action }}" method="post">
+<form action="{{ $action }}" method="post" @if (!$update) enctype="multipart/form-data" @endif>
   @csrf
 
   @if ($update)
@@ -21,8 +21,8 @@
     <label for="seasonsQty" class="form-label">Número de Temporadas:</label>
     <input 
       type="text" 
-      id="seasonQty" 
-      name="seasonQty" 
+      id="seasonsQty" 
+      name="seasonsQty" 
       class="form-control"
       value="{{ old('seasonsQty') }}"
     >
@@ -36,6 +36,18 @@
       class="form-control"
       value="{{ old('episodesPerSeason') }}"
     >
+  </div>
+  <div class="row mb-3">
+    <div class="col-12">
+      <label for="cover" class="form-label">Capa</label>
+      <input 
+        type="file" 
+        id="cover"
+        name="cover" 
+        class="form-control"
+        accept="image/gif, image/jpeg, image/png"
+      >
+    </div>
   </div>
   @endif
 

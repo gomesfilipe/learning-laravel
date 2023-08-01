@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Series extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome']; // Pega somente o campo nome num mass assignment
+    protected $fillable = ['nome', 'cover']; // Pega somente o campo nome e cover num mass assignment
 
     public function seasons() {
         return $this->hasMany(Season::class, 'series_id'); // series_id é o nome da chave estrangeira

@@ -6,6 +6,7 @@ use App\Models\Season;
 use App\Models\Episode;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\SeriesFormRequest;
+use App\Http\Requests\UpdateSeriesFormRequest;
 
 class EloquentSeriesRepository implements SeriesRepository
 {
@@ -19,11 +20,24 @@ class EloquentSeriesRepository implements SeriesRepository
       // $serie->nome = $nomeSerie;
       // $serie->save();
 
-      $serie = Series::create($request->all());
+      // $serie = Series::create($request->all());
+      
+      $atributes = ['nome' => $request->nome];
+
+      if($request->coverPath) {
+        $atributes['cover'] = $request->coverPath;
+      }
+      
+      $serie = Series::create($atributes);
+
+      // $serie = Series::create([
+      //   'nome' => $request->nome,
+      //   'cover' => $request->coverPath,
+      // ]);
       // $request->session()->flash('mensagem.sucesso', "Série '$serie->nome' adicionada com sucesso!");
       
       $seasons = [];
-      for($i = 1; $i <= $request->seasonQty; $i++) {
+      for($i = 1; $i <= $request->seasonsQty; $i++) {
           $seasons[] = [
               'series_id' => $serie->id,
               'number' => $i,
@@ -60,7 +74,7 @@ class EloquentSeriesRepository implements SeriesRepository
     }, 5);
   }
 
-  public function update(Series $series, SeriesFormRequest $request) {
+  public function update(Series $series, UpdateSeriesFormRequest $request) {
     return DB::transaction(function () use ($series, $request) {
         $series->fill($request->all());
         return $series->save();

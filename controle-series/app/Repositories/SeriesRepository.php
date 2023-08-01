@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\SeriesFormRequest;
+use App\Http\Requests\UpdateSeriesFormRequest;
 use App\Models\Series;
 
 interface SeriesRepository
@@ -13,5 +14,5 @@ interface SeriesRepository
 
   public function delete(Series $series);
 
-  public function update(Series $series, SeriesFormRequest $request);
+  public function update(Series $series, UpdateSeriesFormRequest $request);
 }
