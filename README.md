@@ -18,40 +18,15 @@ O projeto foi implementado de duas formas: a primeira utilizando **MVC**, enquan
 - Inserção, remoção, edição e consulta de série;
 - Envio de e-mail ao cadastrar série;
 
-# Tecnologias utilizadas
+# Tecnologias Utilizadas
 
-Linguagem:
-```
-PHP 8.1.2
-```
-
-Framework:
-```
-Laravel 10.16.1
-```
-
-Fazer requisições:
-```
-Postman
-```
-
-Views:
-```
-Blade
-```
-```
-Bootstrap
-```
-
-Envio de e-mails:
-```
-Mailtrap
-```
-
-Banco de dados:
-```
-SQLite
-```
+- *PHP 8.1.2*
+- *Laravel 10.16.1*
+- *Postman*
+- *Blade*
+- *Bootstrap*
+- *Mailtrap*
+- *SQLite*
 
 ## Configurando e Executando o Sistema
 Instale o PHP, caso não o possua:
@@ -85,6 +60,11 @@ MAIL_PASSWORD=SUA_SENHA
 ```
 
 Coloque estas informações no arquivo ``.env``.
+
+### Instalando dependências do Laravel Mix e Bootstrap
+```
+$ npm run mix
+```
 
 ### Subindo o banco de dados
 Executar as migrations:
