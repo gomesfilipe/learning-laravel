@@ -14,8 +14,16 @@ class SeriesController extends Controller
   public function __construct(private SeriesRepository $repository) {
     // $this->middleware(Autenticador::class)->except('index');
   }
-  public function index() {
-    return $this->repository->getAll();
+  public function index(Request $request) {
+    $query = Series::query();
+
+    if($request->has('nome')) {
+      $query->where('nome', $request->nome);
+      // return $this->repository->getAll();
+    }
+
+    // return Series::where('nome', $request->nome)->get();
+    return $query->paginate(5);
   }
 
   public function store(SeriesFormRequest $request) {
@@ -36,10 +44,15 @@ class SeriesController extends Controller
     return response()->json('Error', 400);
   }
 
-  public function show(Series $series) {
+  public function show(int $series) {
+    $seriesModel = Series::with('seasons.episodes')->find($series);
+
+    if($seriesModel === null) {
+      return response()->json(['message' => 'Series not found'], 404);
+    }
     // Para funcionar o argumento $series deve ser int
     // $series = Series::whereId($series)->with('seasons.episodes')->first(); // Com temporadas e episódios
-    return response()->json($series, 200); // apenas dados da série
+    return response()->json($seriesModel, 200); // apenas dados da série
   }
 
   public function update(Series $series, UpdateSeriesFormRequest $request) {
