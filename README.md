@@ -15,7 +15,7 @@ O projeto foi implementado de duas formas: a primeira utilizando **MVC**, enquan
 ## Funcionalidades
 - Cadastro de usuário;
 - Login de usuário;
-- Inserção, remoção, edição e remoção de série;
+- Inserção, remoção, edição e consulta de série;
 - Envio de e-mail ao cadastrar série;
 
 # Tecnologias utilizadas
@@ -56,7 +56,7 @@ SQLite
 ## Configurando e Executando o Sistema
 Instale o PHP, caso não o possua:
 ``` 
-sudo apt install php
+$ sudo apt install php
 ```
 
 ### Configurando arquivo .env
